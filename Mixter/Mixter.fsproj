@@ -42,7 +42,9 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Identity.fs" />
+    <Compile Include="Identity.UserIdentity.fs" />
+    <Compile Include="Identity.Session.fs" />
+    <Compile Include="Identity.SessionDescription.fs" />
     <Compile Include="Message.fs" />
     <Compile Include="Identity.Infrastructure.fs" />
     <None Include="App.fsx" />
