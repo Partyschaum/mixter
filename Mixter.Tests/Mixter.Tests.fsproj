@@ -49,7 +49,7 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="MessageTests.fs" />
+    <Compile Include="Core.Message.fs" />
     <Compile Include="Identity.Infrastructure.Tests.fs" />
     <None Include="paket.references" />
     <None Include="App.config" />

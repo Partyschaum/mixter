@@ -1,10 +1,10 @@
-﻿namespace Mixter.Domain.Message.Tests
+﻿namespace Mixter.Tests.Domain.Core.Message
 
 open NUnit.Framework
 open FsUnit
 open System
 open Mixter.Domain.Identity.UserIdentity
-open Mixter.Domain.Message
+open Mixter.Domain.Core.Message
 
 [<TestFixture>]
 type ``Given a Message`` ()=

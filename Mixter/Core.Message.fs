@@ -1,4 +1,4 @@
-﻿module Mixter.Domain.Message
+﻿module Mixter.Domain.Core.Message
 
 open Mixter.Domain.Identity.UserIdentity
 open System
