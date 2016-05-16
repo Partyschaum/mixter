@@ -1,6 +1,6 @@
 ﻿module Mixter.Domain.Message
 
-open Mixter.Domain.Identity
+open Mixter.Domain.Identity.UserIdentity
 open System
 
 type MessageId = MessageId of string

@@ -3,7 +3,7 @@
 open NUnit.Framework
 open FsUnit
 open System
-open Mixter.Domain.Identity
+open Mixter.Domain.Identity.UserIdentity
 open Mixter.Domain.Message
 
 [<TestFixture>]
