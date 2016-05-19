@@ -85,6 +85,18 @@ type ``Given a Message`` ()=
         ]   |> apply 
             |> delete authorId
             |> should equal [ ]
+            
+    [<Test>] 
+    member x.``Given deleted message When requack Then do not raise MessageRequacked`` () =
+        let messageId = MessageId.generate
+        let authorId = UserId "author@mix-it.fr"
+        let requacker = UserId "otherUser@mix-it.fr"
+        [ 
+            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageDeleted { MessageId = messageId; Deleter = authorId }
+        ]   |> apply 
+            |> requack requacker
+            |> should equal [ ]
 
 
 
