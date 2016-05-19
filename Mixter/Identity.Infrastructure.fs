@@ -13,7 +13,7 @@ type MemorySessionsStore() =
         then Some store.[sessionId]
         else option.None
 
-    member this.ApplyChange sessionId session = 
-        match session with 
-        | Some session -> store.Add (sessionId, session)
-        | None -> store.Remove sessionId |> ignore
+    member this.ApplyChange change = 
+        match change with 
+        | Created (sessionId, session) -> store.Add (sessionId, session)
+        | Removed sessionId -> store.Remove sessionId |> ignore

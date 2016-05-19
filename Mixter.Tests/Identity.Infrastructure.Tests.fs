@@ -16,8 +16,9 @@ type ``Given a repository of session projection`` ()=
         let sessionId = SessionId.generate ()
         let anotherSessionId = SessionId.generate ()
         let sessions = new MemorySessionsStore()
-        sessions.ApplyChange sessionId (Some { SessionId = sessionId; UserId = UserId "clem@mix-it.fr" })
-        sessions.ApplyChange anotherSessionId (Some { SessionId = anotherSessionId; UserId = UserId "clem@mix-it.fr" })
+        sessions.ApplyChange (SessionChange.Created (sessionId, { UserId = UserId "user1@mix-it.fr" }))
+        sessions.ApplyChange (SessionChange.Created (anotherSessionId, { UserId = UserId "user2@mix-it.fr" }))
 
         sessions.GetSession sessionId
-            |> should equal (Some { UserId = UserId "clem@mix-it.fr"; SessionId = sessionId })
+            |> should equal (Some { UserId = UserId "user1@mix-it.fr" })
+            
