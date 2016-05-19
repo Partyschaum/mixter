@@ -53,3 +53,17 @@ type ``Given a Message`` ()=
         ]   |> apply 
             |> requack requackerId
             |> should equal []
+            
+    [<Test>] 
+    member x.``When delete, then return MessageDeleted`` () =
+        let messageId = MessageId.generate
+        let authorId = UserId "author@mix-it.fr"
+        let requackerId = UserId "requacker@mix-it.fr"
+        [ 
+            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+        ]   |> apply 
+            |> delete
+            |> should equal [ MessageDeleted { MessageId = messageId } ]
+
+
+

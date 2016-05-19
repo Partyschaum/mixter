@@ -9,8 +9,10 @@ type MessageId = MessageId of string
 type Event =
     | MessageQuacked of MessageQuacked
     | MessageRequacked of MessageRequacked
+    | MessageDeleted of MessageDeleted
 and MessageQuacked = { MessageId: MessageId; UserId: UserId; Content: string}
 and MessageRequacked = { MessageId: MessageId; Requacker: UserId }
+and MessageDeleted = { MessageId: MessageId }
 
 type DecisionProjection = 
     | NotQuackedMessage
@@ -26,6 +28,11 @@ let requack requackerId decisionProjection =
     | QuackedMessage p when p.Requackers |> List.exists (fun r -> r = requackerId) -> []
     | QuackedMessage p -> [ MessageRequacked { MessageId = p.MessageId; Requacker = requackerId } ]
     | NotQuackedMessage -> []
+
+let delete decisionProjection = 
+    match decisionProjection with
+    | QuackedMessage p -> [ MessageDeleted { MessageId = p.MessageId } ]
+    | _ -> []
 
 let applyOne decisionProjection event =
     match event with
