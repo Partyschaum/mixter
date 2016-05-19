@@ -7,6 +7,16 @@ open Mixter.Domain.Identity.UserIdentity
 open Mixter.Domain.Core.Message
 
 [<TestFixture>]
+type ``MessageId should`` ()=
+    [<Test>] 
+    member x.``Return unique id when generate`` () =
+        let messageId1 = MessageId.generate
+        let messageId2 = MessageId.generate
+
+        messageId1 
+            |> should not' (equal messageId2)
+
+[<TestFixture>]
 type ``Given a Message`` ()=
     [<Test>] 
     member x.``When quack, then user quacked event is returned`` () =
