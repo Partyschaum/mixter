@@ -12,7 +12,7 @@ type Event =
     | MessageDeleted of MessageDeleted
 and MessageQuacked = { MessageId: MessageId; UserId: UserId; Content: string}
 and MessageRequacked = { MessageId: MessageId; Requacker: UserId }
-and MessageDeleted = { MessageId: MessageId }
+and MessageDeleted = { MessageId: MessageId; Deleter: UserId }
 
 type DecisionProjection = 
     | NotQuackedMessage
@@ -29,9 +29,10 @@ let requack requackerId decisionProjection =
     | QuackedMessage p -> [ MessageRequacked { MessageId = p.MessageId; Requacker = requackerId } ]
     | NotQuackedMessage -> []
 
-let delete decisionProjection = 
+let delete deleter decisionProjection = 
     match decisionProjection with
-    | QuackedMessage p -> [ MessageDeleted { MessageId = p.MessageId } ]
+    | QuackedMessage p when p.AuthorId <> deleter -> []
+    | QuackedMessage p -> [ MessageDeleted { MessageId = p.MessageId; Deleter = deleter } ]
     | _ -> []
 
 let applyOne decisionProjection event =
@@ -40,7 +41,7 @@ let applyOne decisionProjection event =
     | MessageRequacked e -> 
         match decisionProjection with
         | NotQuackedMessage -> decisionProjection
-        | QuackedMessage p -> QuackedMessage { p with Requackers = e.Requacker :: p.Requackers } 
+        | QuackedMessage p -> QuackedMessage { p with Requackers = e.Requacker :: p.Requackers }
 
 let apply events =
     Seq.fold applyOne NotQuackedMessage events

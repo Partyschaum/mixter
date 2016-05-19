@@ -58,12 +58,22 @@ type ``Given a Message`` ()=
     member x.``When delete, then return MessageDeleted`` () =
         let messageId = MessageId.generate
         let authorId = UserId "author@mix-it.fr"
-        let requackerId = UserId "requacker@mix-it.fr"
         [ 
             MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
         ]   |> apply 
-            |> delete
-            |> should equal [ MessageDeleted { MessageId = messageId } ]
+            |> delete authorId
+            |> should equal [ MessageDeleted { MessageId = messageId; Deleter = authorId } ]
+            
+    [<Test>] 
+    member x.``When delete by someone else than author, then do not return MessageDeleted`` () =
+        let messageId = MessageId.generate
+        let authorId = UserId "author@mix-it.fr"
+        let deleterId = UserId "deleter@mix-it.fr"
+        [ 
+            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+        ]   |> apply 
+            |> delete deleterId
+            |> should equal [ ]
 
 
 
