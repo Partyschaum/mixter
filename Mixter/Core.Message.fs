@@ -7,29 +7,30 @@ type MessageId = MessageId of string
     with static member generate = MessageId (Guid.NewGuid().ToString())
 
 type Event =
-    | MessagePublished of MessagePublished
-    | MessageRepublished of MessageRepublished
-and MessagePublished = { MessageId: MessageId; UserId: UserId; Content: string}
-and MessageRepublished = { MessageId: MessageId }
+    | MessageQuacked of MessageQuacked
+    | MessageRequacked of MessageRequacked
+and MessageQuacked = { MessageId: MessageId; UserId: UserId; Content: string}
+and MessageRequacked = { MessageId: MessageId }
 
 type DecisionProjection = 
-    | NotPublishedMessage
-    | PublishedMessage of PublishedMessage 
-and PublishedMessage = { MessageId: MessageId; AuthorId: UserId; }
+    | NotQuackedMessage
+    | QuackedMessage of QuackedMessage 
+and QuackedMessage = { MessageId: MessageId; AuthorId: UserId; }
 
-let publish messageId authorId content =
-    [ MessagePublished { MessageId = messageId; UserId = authorId; Content = content } ]
+let quack messageId authorId content =
+    [ MessageQuacked { MessageId = messageId; UserId = authorId; Content = content } ]
 
-let republish republisherId decisionProjection =
+let requack requackerId decisionProjection =
     match decisionProjection with
-    | PublishedMessage p when p.AuthorId <> republisherId -> [ MessageRepublished { MessageId = p.MessageId } ]
-    | PublishedMessage _
-    | NotPublishedMessage -> []
+    | QuackedMessage p when p.AuthorId <> requackerId -> [ MessageRequacked { MessageId = p.MessageId } ]
+    | QuackedMessage _
+    | NotQuackedMessage -> []
 
 let applyOne decisionProjection event =
     match event with
-    | MessagePublished e -> PublishedMessage { MessageId = e.MessageId; AuthorId = e.UserId }
-    | MessageRepublished _ -> decisionProjection
+    | MessageQuacked e -> QuackedMessage { MessageId = e.MessageId; AuthorId = e.UserId }
+    | MessageRequacked _ -> decisionProjection
 
 let apply events =
-    Seq.fold applyOne NotPublishedMessage events
+    Seq.fold applyOne NotQuackedMessage events
+

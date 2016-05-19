@@ -9,24 +9,24 @@ open Mixter.Domain.Core.Message
 [<TestFixture>]
 type ``Given a Message`` ()=
     [<Test>] 
-    member x.``When publish, then user published event is returned`` () =
+    member x.``When quack, then user quacked event is returned`` () =
         let messageId = MessageId.generate
-        publish messageId (UserId "clem@mix-it.fr") "hello world" 
-            |> should equal [ MessagePublished { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
+        quack messageId (UserId "clem@mix-it.fr") "hello world" 
+            |> should equal [ MessageQuacked { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
 
     [<Test>] 
-    member x.``When republish, then user republished event is returned`` () =
+    member x.``When requack, then user requacked event is returned`` () =
         let messageId = MessageId.generate
-        [ MessagePublished { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
+        [ MessageQuacked { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
             |> apply
-            |> republish (UserId "someone@mix-it.fr")
-            |> should equal [ MessageRepublished { MessageId = messageId } ]
+            |> requack (UserId "someone@mix-it.fr")
+            |> should equal [ MessageRequacked { MessageId = messageId } ]
             
     [<Test>] 
-    member x.``When author republish, then nothing is returned`` () =
+    member x.``When author requack, then nothing is returned`` () =
         let messageId = MessageId.generate
         let authorId = UserId "clem@mix-it.fr"
-        [ MessagePublished { MessageId = messageId; UserId = authorId; Content = "hello world" } ]
+        [ MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" } ]
             |> apply 
-            |> republish authorId
+            |> requack authorId
             |> should equal []
