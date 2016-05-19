@@ -74,6 +74,17 @@ type ``Given a Message`` ()=
         ]   |> apply 
             |> delete deleterId
             |> should equal [ ]
+            
+    [<Test>] 
+    member x.``Given deleted message When delete Then Nothing`` () =
+        let messageId = MessageId.generate
+        let authorId = UserId "author@mix-it.fr"
+        [ 
+            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageDeleted { MessageId = messageId; Deleter = authorId }
+        ]   |> apply 
+            |> delete authorId
+            |> should equal [ ]
 
 
 

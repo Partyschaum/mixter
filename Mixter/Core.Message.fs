@@ -17,6 +17,7 @@ and MessageDeleted = { MessageId: MessageId; Deleter: UserId }
 type DecisionProjection = 
     | NotQuackedMessage
     | QuackedMessage of QuackedMessage
+    | DeletedMessage
 and QuackedMessage = { MessageId: MessageId; AuthorId: UserId; Requackers: UserId list }
 
 let quack messageId authorId content =
@@ -27,7 +28,7 @@ let requack requackerId decisionProjection =
     | QuackedMessage p when p.AuthorId = requackerId -> []
     | QuackedMessage p when p.Requackers |> List.exists (fun r -> r = requackerId) -> []
     | QuackedMessage p -> [ MessageRequacked { MessageId = p.MessageId; Requacker = requackerId } ]
-    | NotQuackedMessage -> []
+    | _ -> []
 
 let delete deleter decisionProjection = 
     match decisionProjection with
@@ -40,8 +41,12 @@ let applyOne decisionProjection event =
     | MessageQuacked e -> QuackedMessage { MessageId = e.MessageId; AuthorId = e.UserId; Requackers = [] }
     | MessageRequacked e -> 
         match decisionProjection with
-        | NotQuackedMessage -> decisionProjection
         | QuackedMessage p -> QuackedMessage { p with Requackers = e.Requacker :: p.Requackers }
+        | _ -> decisionProjection
+    | MessageDeleted e -> 
+        match decisionProjection with
+        | QuackedMessage p -> DeletedMessage
+        | _ -> decisionProjection
 
 let apply events =
     Seq.fold applyOne NotQuackedMessage events
