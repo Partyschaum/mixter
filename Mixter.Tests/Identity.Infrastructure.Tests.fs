@@ -21,4 +21,22 @@ type ``Given a repository of session projection`` ()=
 
         sessions.GetSession sessionId
             |> should equal (Some { UserId = UserId "user1@mix-it.fr" })
+
+    [<Test>]
+    member x.``When GetUserSession with userId, then return sessionId`` () =
+        let sessionId = SessionId.generate ()
+        let sessions = new MemorySessionsStore()
+        let userId = UserId "user1@mix-it.fr" 
+        sessions.ApplyChange (SessionChange.Created (sessionId, { UserId = userId }))
+
+        sessions.GetUserSession userId
+            |> should equal (Some sessionId)
+
+    [<Test>]
+    member x.``When GetUserSession with unknown userId, then return None`` () =
+        let sessions = new MemorySessionsStore()
+        let userId = UserId "user1@mix-it.fr" 
+
+        sessions.GetUserSession userId
+            |> should equal None
             
