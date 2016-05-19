@@ -1,37 +1,45 @@
-﻿#load "Identity.fs"
+﻿#load "Identity.UserIdentity.fs"
+#load "Identity.Session.fs"
+#load "Identity.SessionDescription.fs"
 #load "Identity.Infrastructure.fs"
 
 open System
+open System.Collections.Generic
 
 open Mixter
-open Domain.Identity
+open Mixter.Domain.Identity
+open UserIdentity
+open Session
 open Infrastructure.Identity.Read
 
-let simulateUserRegistration = 
-    UserId "clem@mix-it.fr" 
-        |> register
+let sessionsStore = new MemorySessionsStore()
 
-let simulateUserLogin userEvents =
+let sessionHandler (event: Session.Event) =
+    SessionDescription.apply event
+        |> sessionsStore.ApplyChange
+
+let userIdentityHandler (event: UserIdentity.Event) =
+    ()
+
+let eventsHandler handler events =
+    events |> Seq.iter handler
+
+let simulateUserRegistration = 
+    let userId = UserId "clem@mix-it.fr" 
+    userId
+        |> register
+        |> eventsHandler userIdentityHandler
+
+    userId
+
+let simulateUserLogin userId =
     let now = fun () -> DateTime.Now
     let sessionId = SessionId.generate
     
-    let newEvents = 
-        userEvents
-            |> apply
-            |> logIn sessionId now
+    logIn userId sessionId now 
+        |> eventsHandler sessionHandler
 
-    (newEvents, sessionId)
-        
-let sessionsStore = new MemorySessionsStore()
+let userId = simulateUserRegistration
+simulateUserLogin userId
+let sessionId = sessionsStore.GetUserSession userId
 
-let simulateSessionStorage (userEvents, sessionId) =
-    userEvents 
-        |> Seq.map (Read.apply sessionsStore.GetSession)
-        |> Seq.iter sessionsStore.ApplyChange
-
-    sessionId
-
-simulateUserRegistration
-    |> simulateUserLogin
-    |> simulateSessionStorage
-    |> sessionsStore.GetSession
