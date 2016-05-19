@@ -27,10 +27,11 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``When requack, then user requacked event is returned`` () =
         let messageId = MessageId.generate
+        let requaker = UserId "someone@mix-it.fr"
         [ MessageQuacked { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
             |> apply
-            |> requack (UserId "someone@mix-it.fr")
-            |> should equal [ MessageRequacked { MessageId = messageId } ]
+            |> requack requaker
+            |> should equal [ MessageRequacked { MessageId = messageId; Requacker = requaker } ]
             
     [<Test>] 
     member x.``When author requack, then nothing is returned`` () =
@@ -39,4 +40,16 @@ type ``Given a Message`` ()=
         [ MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" } ]
             |> apply 
             |> requack authorId
+            |> should equal []
+            
+    [<Test>] 
+    member x.``When requack two times same message, then nothing is returned`` () =
+        let messageId = MessageId.generate
+        let authorId = UserId "author@mix-it.fr"
+        let requackerId = UserId "requacker@mix-it.fr"
+        [ 
+            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageRequacked { MessageId = messageId; Requacker = requackerId }
+        ]   |> apply 
+            |> requack requackerId
             |> should equal []
