@@ -14,7 +14,7 @@ type ``TimelineMessageRepository should`` ()=
     [<Test>]
     member x.``return messages of user when GetMessagesOfUser`` () =
         let repository = new MemoryTimelineMessageStore()
-        let timelineMessage = { Owner = UserId "A"; Author = UserId "A"; Content = "Hello"; MessageId = MessageId.generate }
+        let timelineMessage = { Owner = UserId "A"; Author = UserId "A"; Content = "Hello"; MessageId = MessageId.generate() }
 
         repository.Save timelineMessage
 
@@ -24,7 +24,7 @@ type ``TimelineMessageRepository should`` ()=
     [<Test>]
     member x.``save only one message when save two same message`` () =
         let repository = new MemoryTimelineMessageStore()
-        let timelineMessage = { Owner = UserId "A"; Author = UserId "A"; Content = "Hello"; MessageId = MessageId.generate }
+        let timelineMessage = { Owner = UserId "A"; Author = UserId "A"; Content = "Hello"; MessageId = MessageId.generate() }
 
         repository.Save timelineMessage
         repository.Save timelineMessage
@@ -35,7 +35,7 @@ type ``TimelineMessageRepository should`` ()=
     [<Test>]
     member x.``Remove message of all users when remove this message`` () =
         let repository = new MemoryTimelineMessageStore()
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let user1 = UserId "A"
         let user2 = UserId "B"
         repository.Save { Owner = user1; Author = user1; Content = "Hello"; MessageId = messageId }

@@ -4,7 +4,7 @@ open Mixter.Domain.Identity.UserIdentity
 open System
 
 type MessageId = MessageId of string
-    with static member generate = MessageId (Guid.NewGuid().ToString())
+    with static member generate() = MessageId (Guid.NewGuid().ToString())
 
 type Event =
     | MessageQuacked of MessageQuacked

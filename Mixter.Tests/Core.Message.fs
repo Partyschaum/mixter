@@ -10,8 +10,8 @@ open Mixter.Domain.Core.Message
 type ``MessageId should`` ()=
     [<Test>] 
     member x.``Return unique id when generate`` () =
-        let messageId1 = MessageId.generate
-        let messageId2 = MessageId.generate
+        let messageId1 = MessageId.generate()
+        let messageId2 = MessageId.generate()
 
         messageId1 
             |> should not' (equal messageId2)
@@ -20,13 +20,13 @@ type ``MessageId should`` ()=
 type ``Given a Message`` ()=
     [<Test>] 
     member x.``When quack, then user quacked event is returned`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         quack messageId (UserId "clem@mix-it.fr") "hello world" 
             |> should equal [ MessageQuacked { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
 
     [<Test>] 
     member x.``When requack, then user requacked event is returned`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let requaker = UserId "someone@mix-it.fr"
         [ MessageQuacked { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
             |> apply
@@ -35,7 +35,7 @@ type ``Given a Message`` ()=
             
     [<Test>] 
     member x.``When author requack, then nothing is returned`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let authorId = UserId "clem@mix-it.fr"
         [ MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" } ]
             |> apply 
@@ -44,7 +44,7 @@ type ``Given a Message`` ()=
             
     [<Test>] 
     member x.``When requack two times same message, then nothing is returned`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let authorId = UserId "author@mix-it.fr"
         let requackerId = UserId "requacker@mix-it.fr"
         [ 
@@ -56,7 +56,7 @@ type ``Given a Message`` ()=
             
     [<Test>] 
     member x.``When delete, then return MessageDeleted`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let authorId = UserId "author@mix-it.fr"
         [ 
             MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
@@ -66,7 +66,7 @@ type ``Given a Message`` ()=
             
     [<Test>] 
     member x.``When delete by someone else than author, then do not return MessageDeleted`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let authorId = UserId "author@mix-it.fr"
         let deleterId = UserId "deleter@mix-it.fr"
         [ 
@@ -77,7 +77,7 @@ type ``Given a Message`` ()=
             
     [<Test>] 
     member x.``Given deleted message When delete Then Nothing`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let authorId = UserId "author@mix-it.fr"
         [ 
             MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
@@ -88,7 +88,7 @@ type ``Given a Message`` ()=
             
     [<Test>] 
     member x.``Given deleted message When requack Then do not raise MessageRequacked`` () =
-        let messageId = MessageId.generate
+        let messageId = MessageId.generate()
         let authorId = UserId "author@mix-it.fr"
         let requacker = UserId "otherUser@mix-it.fr"
         [ 
