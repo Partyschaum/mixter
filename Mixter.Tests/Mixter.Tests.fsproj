@@ -53,7 +53,9 @@
     <Compile Include="Identity.Session.fs" />
     <Compile Include="Identity.SessionDescription.fs" />
     <Compile Include="Core.Message.fs" />
+    <Compile Include="Core.Timeline.fs" />
     <Compile Include="Identity.Infrastructure.Tests.fs" />
+    <Compile Include="Core.Infrastructure.fs" />
     <None Include="App.config" />
     <None Include="paket.references" />
   </ItemGroup>
