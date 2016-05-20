@@ -49,13 +49,13 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
-    <Compile Include="Core.Message.fs" />
-    <Compile Include="Identity.Infrastructure.Tests.fs" />
-    <None Include="paket.references" />
-    <None Include="App.config" />
     <Compile Include="Identity.UserIdentity.fs" />
     <Compile Include="Identity.Session.fs" />
     <Compile Include="Identity.SessionDescription.fs" />
+    <Compile Include="Core.Message.fs" />
+    <Compile Include="Identity.Infrastructure.Tests.fs" />
+    <None Include="App.config" />
+    <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
