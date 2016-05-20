@@ -22,13 +22,13 @@ type ``Given a Message`` ()=
     member x.``When quack, then user quacked event is returned`` () =
         let messageId = MessageId.generate()
         quack messageId (UserId "clem@mix-it.fr") "hello world" 
-            |> should equal [ MessageQuacked { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
+            |> should equal [ MessageQuacked { MessageId = messageId; AuthorId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
 
     [<Test>] 
     member x.``When requack, then user requacked event is returned`` () =
         let messageId = MessageId.generate()
         let requaker = UserId "someone@mix-it.fr"
-        [ MessageQuacked { MessageId = messageId; UserId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
+        [ MessageQuacked { MessageId = messageId; AuthorId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
             |> apply
             |> requack requaker
             |> should equal [ MessageRequacked { MessageId = messageId; Requacker = requaker } ]
@@ -37,7 +37,7 @@ type ``Given a Message`` ()=
     member x.``When author requack, then nothing is returned`` () =
         let messageId = MessageId.generate()
         let authorId = UserId "clem@mix-it.fr"
-        [ MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" } ]
+        [ MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" } ]
             |> apply 
             |> requack authorId
             |> should equal []
@@ -48,7 +48,7 @@ type ``Given a Message`` ()=
         let authorId = UserId "author@mix-it.fr"
         let requackerId = UserId "requacker@mix-it.fr"
         [ 
-            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
             MessageRequacked { MessageId = messageId; Requacker = requackerId }
         ]   |> apply 
             |> requack requackerId
@@ -59,7 +59,7 @@ type ``Given a Message`` ()=
         let messageId = MessageId.generate()
         let authorId = UserId "author@mix-it.fr"
         [ 
-            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
         ]   |> apply 
             |> delete authorId
             |> should equal [ MessageDeleted { MessageId = messageId; Deleter = authorId } ]
@@ -70,7 +70,7 @@ type ``Given a Message`` ()=
         let authorId = UserId "author@mix-it.fr"
         let deleterId = UserId "deleter@mix-it.fr"
         [ 
-            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
         ]   |> apply 
             |> delete deleterId
             |> should equal [ ]
@@ -80,7 +80,7 @@ type ``Given a Message`` ()=
         let messageId = MessageId.generate()
         let authorId = UserId "author@mix-it.fr"
         [ 
-            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
             MessageDeleted { MessageId = messageId; Deleter = authorId }
         ]   |> apply 
             |> delete authorId
@@ -92,7 +92,7 @@ type ``Given a Message`` ()=
         let authorId = UserId "author@mix-it.fr"
         let requacker = UserId "otherUser@mix-it.fr"
         [ 
-            MessageQuacked { MessageId = messageId; UserId = authorId; Content = "hello world" }
+            MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
             MessageDeleted { MessageId = messageId; Deleter = authorId }
         ]   |> apply 
             |> requack requacker

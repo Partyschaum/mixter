@@ -7,6 +7,6 @@ type TimelineMessage = { Owner: UserId; Author: UserId; Content: string; Message
 
 let handle save remove evt =
     match evt with
-    | MessageQuacked e -> save { Owner = e.UserId; Author = e.UserId; Content = e.Content; MessageId = e.MessageId }
+    | MessageQuacked e -> save { Owner = e.AuthorId; Author = e.AuthorId; Content = e.Content; MessageId = e.MessageId }
     | MessageDeleted e -> remove e.MessageId
     | _ -> ()

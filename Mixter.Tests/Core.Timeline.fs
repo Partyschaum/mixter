@@ -13,12 +13,12 @@ type ``Timeline`` ()=
     [<Test>] 
     member x.``When handle MessageQuacked Then save TimelineMessage projection for author`` () =
         let repository = new MemoryTimelineMessageStore()
-        let messageQuacked = { MessageId = MessageId.generate(); UserId = UserId "A"; Content = "Hello" }
+        let messageQuacked = { MessageId = MessageId.generate(); AuthorId = UserId "A"; Content = "Hello" }
 
         MessageQuacked messageQuacked |> handle repository.Save repository.Delete
 
-        repository.GetMessagesOfUser messageQuacked.UserId
-            |> should equal [{ Owner = messageQuacked.UserId; Author = messageQuacked.UserId; Content = messageQuacked.Content; MessageId = messageQuacked.MessageId }]
+        repository.GetMessagesOfUser messageQuacked.AuthorId
+            |> should equal [{ Owner = messageQuacked.AuthorId; Author = messageQuacked.AuthorId; Content = messageQuacked.Content; MessageId = messageQuacked.MessageId }]
 
 
     [<Test>] 
@@ -27,7 +27,7 @@ type ``Timeline`` ()=
         let messageId = MessageId.generate()
         let author = UserId "A"
 
-        MessageQuacked { MessageId = messageId; UserId = author; Content = "Hello" } 
+        MessageQuacked { MessageId = messageId; AuthorId = author; Content = "Hello" } 
         |> handle repository.Save repository.Delete
 
         MessageDeleted { MessageId = messageId; Deleter = author }

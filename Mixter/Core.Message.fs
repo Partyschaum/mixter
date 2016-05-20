@@ -10,7 +10,7 @@ type Event =
     | MessageQuacked of MessageQuacked
     | MessageRequacked of MessageRequacked
     | MessageDeleted of MessageDeleted
-and MessageQuacked = { MessageId: MessageId; UserId: UserId; Content: string}
+and MessageQuacked = { MessageId: MessageId; AuthorId: UserId; Content: string}
 and MessageRequacked = { MessageId: MessageId; Requacker: UserId }
 and MessageDeleted = { MessageId: MessageId; Deleter: UserId }
 
@@ -21,7 +21,7 @@ type DecisionProjection =
 and QuackedMessage = { MessageId: MessageId; AuthorId: UserId; Requackers: UserId list }
 
 let quack messageId authorId content =
-    [ MessageQuacked { MessageId = messageId; UserId = authorId; Content = content } ]
+    [ MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = content } ]
 
 let requack requackerId decisionProjection =
     match decisionProjection with
@@ -38,7 +38,7 @@ let delete deleter decisionProjection =
 
 let applyOne decisionProjection event =
     match event with
-    | MessageQuacked e -> QuackedMessage { MessageId = e.MessageId; AuthorId = e.UserId; Requackers = [] }
+    | MessageQuacked e -> QuackedMessage { MessageId = e.MessageId; AuthorId = e.AuthorId; Requackers = [] }
     | MessageRequacked e -> 
         match decisionProjection with
         | QuackedMessage p -> QuackedMessage { p with Requackers = e.Requacker :: p.Requackers }
