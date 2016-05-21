@@ -35,3 +35,15 @@ type ``Subscription should`` ()=
             |> apply
             |> notifyFollower message
             |> should equal [FolloweeMessageQuacked { SubscriptionId = subscription; Message = message}]
+
+    [<Test>] 
+    member x.``Given unfollow When notify follower Then do not returned FollowerMessageQuacked`` () =
+        let subscription = { Follower = UserId "follower@mix-it.fr"; Followee = UserId "followee@mix-it.fr" }
+        let message = MessageId.generate()
+
+        [
+            UserFollowed { SubscriptionId = subscription}
+            UserUnfollowed { SubscriptionId = subscription }
+        ]   |> apply
+            |> notifyFollower message
+            |> should equal []

@@ -34,6 +34,7 @@ let notifyFollower message decisionProjection =
 let applyOne decisionProjection event =
     match event with
     | UserFollowed e -> Active e.SubscriptionId
+    | UserUnfollowed e -> Desactive e.SubscriptionId
     | _ -> decisionProjection
 
 let apply events =
