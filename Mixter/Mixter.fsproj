@@ -47,6 +47,7 @@
     <Compile Include="Identity.SessionDescription.fs" />
     <Compile Include="Core.Message.fs" />
     <Compile Include="Core.Timeline.fs" />
+    <Compile Include="Core.Subscription.fs" />
     <Compile Include="Core.Infrastructure.fs" />
     <Compile Include="Identity.Infrastructure.fs" />
     <None Include="App.fsx" />
