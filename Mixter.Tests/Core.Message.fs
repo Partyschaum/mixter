@@ -21,14 +21,14 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``When quack, then user quacked event is returned`` () =
         let messageId = MessageId.generate()
-        quack messageId (UserId "clem@mix-it.fr") "hello world" 
-            |> should equal [ MessageQuacked { MessageId = messageId; AuthorId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
+        quack messageId ({ Email = "clem@mix-it.fr"}) "hello world" 
+            |> should equal [ MessageQuacked { MessageId = messageId; AuthorId = { Email = "clem@mix-it.fr"}; Content = "hello world" } ]
 
     [<Test>] 
     member x.``When requack, then user requacked event is returned`` () =
         let messageId = MessageId.generate()
-        let requaker = UserId "someone@mix-it.fr"
-        [ MessageQuacked { MessageId = messageId; AuthorId = UserId "clem@mix-it.fr"; Content = "hello world" } ]
+        let requaker = { Email = "someone@mix-it.fr"}
+        [ MessageQuacked { MessageId = messageId; AuthorId = { Email = "clem@mix-it.fr" }; Content = "hello world" } ]
             |> apply
             |> requack requaker
             |> should equal [ MessageRequacked { MessageId = messageId; Requacker = requaker } ]
@@ -36,7 +36,7 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``When author requack, then nothing is returned`` () =
         let messageId = MessageId.generate()
-        let authorId = UserId "clem@mix-it.fr"
+        let authorId = { Email = "clem@mix-it.fr" }
         [ MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" } ]
             |> apply 
             |> requack authorId
@@ -45,8 +45,8 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``When requack two times same message, then nothing is returned`` () =
         let messageId = MessageId.generate()
-        let authorId = UserId "author@mix-it.fr"
-        let requackerId = UserId "requacker@mix-it.fr"
+        let authorId = { Email = "author@mix-it.fr" }
+        let requackerId = { Email = "requacker@mix-it.fr" }
         [ 
             MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
             MessageRequacked { MessageId = messageId; Requacker = requackerId }
@@ -57,7 +57,7 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``When delete, then return MessageDeleted`` () =
         let messageId = MessageId.generate()
-        let authorId = UserId "author@mix-it.fr"
+        let authorId = { Email = "author@mix-it.fr" }
         [ 
             MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
         ]   |> apply 
@@ -67,8 +67,8 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``When delete by someone else than author, then do not return MessageDeleted`` () =
         let messageId = MessageId.generate()
-        let authorId = UserId "author@mix-it.fr"
-        let deleterId = UserId "deleter@mix-it.fr"
+        let authorId = { Email = "author@mix-it.fr" }
+        let deleterId = { Email = "deleter@mix-it.fr" }
         [ 
             MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
         ]   |> apply 
@@ -78,7 +78,7 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``Given deleted message When delete Then Nothing`` () =
         let messageId = MessageId.generate()
-        let authorId = UserId "author@mix-it.fr"
+        let authorId = { Email = "author@mix-it.fr" }
         [ 
             MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
             MessageDeleted { MessageId = messageId; Deleter = authorId }
@@ -89,8 +89,8 @@ type ``Given a Message`` ()=
     [<Test>] 
     member x.``Given deleted message When requack Then do not raise MessageRequacked`` () =
         let messageId = MessageId.generate()
-        let authorId = UserId "author@mix-it.fr"
-        let requacker = UserId "otherUser@mix-it.fr"
+        let authorId = { Email = "author@mix-it.fr" }
+        let requacker = { Email = "otherUser@mix-it.fr" }
         [ 
             MessageQuacked { MessageId = messageId; AuthorId = authorId; Content = "hello world" }
             MessageDeleted { MessageId = messageId; Deleter = authorId }

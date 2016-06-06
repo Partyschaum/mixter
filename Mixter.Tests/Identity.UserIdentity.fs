@@ -10,5 +10,5 @@ type ``Given a User`` ()=
 
     [<Test>] 
     member x.``When he registers, then user registered event is returned`` () =
-        register (UserId "clem@mix-it.fr" ) 
-            |> should equal [ UserRegistered { UserId = UserId "clem@mix-it.fr" } ]
+        register ({ Email = "clem@mix-it.fr" }) 
+            |> should equal [ UserRegistered { UserId = { Email = "clem@mix-it.fr"} } ]

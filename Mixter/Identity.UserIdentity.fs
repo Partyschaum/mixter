@@ -2,7 +2,8 @@
 
 open System
 
-type UserId = UserId of string
+[<StructuredFormatDisplay("{Email}")>]
+type UserId = { Email: string }
         
 type Event = 
     | UserRegistered of UserRegisteredEvent

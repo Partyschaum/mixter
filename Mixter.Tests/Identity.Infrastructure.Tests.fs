@@ -16,17 +16,17 @@ type ``Given a repository of session projection`` ()=
         let sessionId = SessionId.generate ()
         let anotherSessionId = SessionId.generate ()
         let sessions = new MemorySessionsStore()
-        sessions.ApplyChange (SessionChange.Created (sessionId, { UserId = UserId "user1@mix-it.fr" }))
-        sessions.ApplyChange (SessionChange.Created (anotherSessionId, { UserId = UserId "user2@mix-it.fr" }))
+        sessions.ApplyChange (SessionChange.Created (sessionId, { UserId = { Email = "user1@mix-it.fr" } }))
+        sessions.ApplyChange (SessionChange.Created (anotherSessionId, { UserId = { Email = "user2@mix-it.fr" } }))
 
         sessions.GetSession sessionId
-            |> should equal (Some { UserId = UserId "user1@mix-it.fr" })
+            |> should equal (Some { UserId = { Email = "user1@mix-it.fr" } })
 
     [<Test>]
     member x.``When GetUserSession with userId, then return sessionId`` () =
         let sessionId = SessionId.generate ()
         let sessions = new MemorySessionsStore()
-        let userId = UserId "user1@mix-it.fr" 
+        let userId = { Email = "user1@mix-it.fr" }
         sessions.ApplyChange (SessionChange.Created (sessionId, { UserId = userId }))
 
         sessions.GetUserSession userId
@@ -35,7 +35,7 @@ type ``Given a repository of session projection`` ()=
     [<Test>]
     member x.``When GetUserSession with unknown userId, then return None`` () =
         let sessions = new MemorySessionsStore()
-        let userId = UserId "user1@mix-it.fr" 
+        let userId = { Email = "user1@mix-it.fr" } 
 
         sessions.GetUserSession userId
             |> should equal None

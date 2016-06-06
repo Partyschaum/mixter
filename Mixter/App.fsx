@@ -25,7 +25,7 @@ let eventsHandler handler events =
     events |> Seq.iter handler
 
 let simulateUserRegistration = 
-    let userId = UserId "clem@mix-it.fr" 
+    let userId = { Email = "clem@mix-it.fr" }
     userId
         |> register
         |> eventsHandler userIdentityHandler

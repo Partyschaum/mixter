@@ -11,15 +11,15 @@ open Mixter.Domain.Core.Subscription
 type ``Subscription should`` ()=
     [<Test>] 
     member x.``When follow Then UserFollowed is returned`` () =
-        let follower = UserId "follower@mix-it.fr"
-        let followee = UserId "followee@mix-it.fr"
+        let follower = { Email = "follower@mix-it.fr" } 
+        let followee = { Email = "followee@mix-it.fr" }
 
         follow follower followee
             |> should equal [UserFollowed { SubscriptionId = { Follower = follower; Followee = followee } }]
 
     [<Test>] 
     member x.``When unfollow Then UserUnfollowed is returned`` () =
-        let subscription = { Follower = UserId "follower@mix-it.fr"; Followee = UserId "followee@mix-it.fr" }
+        let subscription = { Follower = { Email = "follower@mix-it.fr" }; Followee = { Email = "followee@mix-it.fr" } }
 
         [UserFollowed { SubscriptionId = subscription }]
             |> apply
@@ -28,7 +28,7 @@ type ``Subscription should`` ()=
 
     [<Test>] 
     member x.``When notify follower Then FolloweeMessageQuacked`` () =
-        let subscription = { Follower = UserId "follower@mix-it.fr"; Followee = UserId "followee@mix-it.fr" }
+        let subscription = { Follower = { Email = "follower@mix-it.fr" }; Followee = { Email = "followee@mix-it.fr"} }
         let message = MessageId.generate()
 
         [UserFollowed { SubscriptionId = subscription}]
@@ -38,7 +38,7 @@ type ``Subscription should`` ()=
 
     [<Test>] 
     member x.``Given unfollow When notify follower Then do not returned FollowerMessageQuacked`` () =
-        let subscription = { Follower = UserId "follower@mix-it.fr"; Followee = UserId "followee@mix-it.fr" }
+        let subscription = { Follower = { Email = "follower@mix-it.fr"}; Followee = { Email = "followee@mix-it.fr"} }
         let message = MessageId.generate()
 
         [

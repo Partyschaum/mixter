@@ -14,7 +14,7 @@ type ``Given a started session`` ()=
         let sessionId = SessionId.generate()
         let generateSessionId = fun () -> sessionId
         let getCurrentTime = fun () -> new DateTime()
-        let user = UserId "clem@mix-it.fr"
+        let user = { Email = "clem@mix-it.fr" }
 
         logIn user generateSessionId getCurrentTime
             |> should equal [ UserConnected { SessionId = sessionId; UserId = user; ConnectedAt = getCurrentTime () } ]
@@ -22,7 +22,7 @@ type ``Given a started session`` ()=
     [<Test>]
     member x.``When disconnect, then user disconnected event is returned`` () =
         let sessionId = SessionId.generate()
-        let userId = UserId "clem@mix-it.fr"
+        let userId = { Email = "clem@mix-it.fr" }
         let getCurrentTime = fun () -> new DateTime()
         [ UserConnected { SessionId = sessionId; UserId = userId; ConnectedAt = getCurrentTime () }]
             |> apply
@@ -32,7 +32,7 @@ type ``Given a started session`` ()=
     [<Test>]
     member x.``Given session have been disconnected, when disconnect, then nothing happen`` () =
         let sessionId = SessionId.generate()
-        let userId = UserId "clem@mix-it.fr"
+        let userId = { Email = "clem@mix-it.fr" }
         let getCurrentTime = fun () -> new DateTime()
         [  
             UserConnected { SessionId = sessionId; UserId = userId; ConnectedAt = getCurrentTime () };

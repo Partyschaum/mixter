@@ -10,7 +10,7 @@ open Mixter.Domain.Identity.SessionDescription;
 [<TestFixture>]
 type ``Given a handler of session events`` ()=
     let sessionId = SessionId.generate()
-    let userId = UserId "clem@mix-it.fr"
+    let userId = { Email = "clem@mix-it.fr"}
     
     [<Test>]
     member x.``When project user connected, then it returns a Session projection`` () =

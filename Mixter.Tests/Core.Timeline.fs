@@ -13,7 +13,7 @@ type ``Timeline`` ()=
     [<Test>] 
     member x.``When handle MessageQuacked Then save TimelineMessage projection for author`` () =
         let repository = new MemoryTimelineMessageStore()
-        let messageQuacked = { MessageId = MessageId.generate(); AuthorId = UserId "A"; Content = "Hello" }
+        let messageQuacked = { MessageId = MessageId.generate(); AuthorId = { Email = "A" }; Content = "Hello" }
 
         MessageQuacked messageQuacked |> handle repository.Save repository.Delete
 
@@ -25,7 +25,7 @@ type ``Timeline`` ()=
     member x.``When handle MessageDeleted Then remove this message in timeline`` () =
         let repository = new MemoryTimelineMessageStore()
         let messageId = MessageId.generate()
-        let author = UserId "A"
+        let author = { Email = "A" }
 
         MessageQuacked { MessageId = messageId; AuthorId = author; Content = "Hello" } 
         |> handle repository.Save repository.Delete
