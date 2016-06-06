@@ -50,6 +50,7 @@
     <Compile Include="Core.Subscription.fs" />
     <Compile Include="Core.Infrastructure.fs" />
     <Compile Include="Identity.Infrastructure.fs" />
+    <Compile Include="EventsStore.fs" />
     <None Include="App.fsx" />
     <None Include="paket.references" />
   </ItemGroup>

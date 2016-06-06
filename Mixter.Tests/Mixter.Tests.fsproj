@@ -57,6 +57,7 @@
     <Compile Include="Core.Subscription.fs" />
     <Compile Include="Identity.Infrastructure.Tests.fs" />
     <Compile Include="Core.Infrastructure.fs" />
+    <Compile Include="EventsStore.fs" />
     <None Include="App.config" />
     <None Include="paket.references" />
   </ItemGroup>
