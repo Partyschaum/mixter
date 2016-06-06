@@ -1,7 +1,12 @@
-﻿#load "Identity.UserIdentity.fs"
+﻿#r "../packages/Suave/lib/net40/Suave.dll"
+#r "../packages/Newtonsoft.Json/lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll"
+
+#load "Identity.UserIdentity.fs"
 #load "Identity.Session.fs"
 #load "Identity.SessionDescription.fs"
 #load "Identity.Infrastructure.fs"
+#load "EventsStore.fs"
+#load "Api.fs"
 
 open System
 open System.Collections.Generic
@@ -21,8 +26,7 @@ let sessionHandler (event: Session.Event) =
 let userIdentityHandler (event: UserIdentity.Event) =
     ()
 
-let eventsHandler handler events =
-    events |> Seq.iter handler
+let eventsHandler = Seq.iter
 
 let simulateUserRegistration = 
     let userId = { Email = "clem@mix-it.fr" }
@@ -43,3 +47,4 @@ let userId = simulateUserRegistration
 simulateUserLogin userId
 let sessionId = sessionsStore.GetUserSession userId
 
+Api.start()
