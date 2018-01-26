@@ -37,9 +37,9 @@ let simulateUserRegistration =
 
 let simulateUserLogin userId =
     let now = fun () -> DateTime.Now
-    let sessionId = SessionId.generate
+    let sessionId = SessionId.Generate
     
-    logIn userId sessionId now 
+    logIn userId sessionId now
         |> eventsHandler sessionHandler
 
 let userId = simulateUserRegistration

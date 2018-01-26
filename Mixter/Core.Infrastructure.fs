@@ -7,11 +7,11 @@ open System.Collections.Generic
 type MemoryTimelineMessageStore() =
     let store = new HashSet<TimelineMessage>()
 
-    member x.Save timelineMessage =
+    member __.Save timelineMessage =
         store.Add timelineMessage |> ignore
 
-    member x.GetMessagesOfUser userId =
+    member __.GetMessagesOfUser userId =
         store |> Seq.filter (fun p -> p.Owner = userId)
 
-    member x.Delete messageId =
+    member __.Delete messageId =
         store.RemoveWhere(fun p -> p.MessageId = messageId) |> ignore

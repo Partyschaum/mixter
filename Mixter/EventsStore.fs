@@ -6,7 +6,7 @@ open System.Collections.Generic
 type MemoryEventsStore () = 
     let eventsByAggregate = new Dictionary<Object, Object list>();
 
-    member x.Store (aggregateId: 'a) (events: 'b list) : unit = 
+    member __.Store (aggregateId: 'a) (events: 'b list) : unit = 
         if not (eventsByAggregate.ContainsKey(aggregateId))
         then eventsByAggregate.Add(aggregateId, [])
         
@@ -15,7 +15,7 @@ type MemoryEventsStore () =
 
         eventsByAggregate.[aggregateId] <- newEvents
     
-    member x.Get<'b> aggregateId : 'b list = 
+    member __.Get<'b> aggregateId : 'b list = 
         match eventsByAggregate.ContainsKey(aggregateId) with
         | false -> []
         | true -> eventsByAggregate.[aggregateId] |> List.map (fun c -> c :?> 'b)
