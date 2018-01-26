@@ -1,7 +1,5 @@
 ﻿module Mixter.Domain.Identity.UserIdentity
 
-open System
-
 [<StructuredFormatDisplay("{Email}")>]
 type UserId = { Email: string }
         

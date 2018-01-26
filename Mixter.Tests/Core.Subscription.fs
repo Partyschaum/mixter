@@ -2,7 +2,6 @@
 
 open Xunit
 open Swensen.Unquote
-open System
 open Mixter.Domain.Identity.UserIdentity
 open Mixter.Domain.Core.Message
 open Mixter.Domain.Core.Subscription
@@ -28,7 +27,7 @@ type ``Subscription should`` ()=
     [<Fact>] 
     member x.``When notify follower Then FolloweeMessageQuacked`` () =
         let subscription = { Follower = { Email = "follower@mix-it.fr" }; Followee = { Email = "followee@mix-it.fr"} }
-        let message = MessageId.generate()
+        let message = MessageId.Generate()
         let history = [UserFollowed { SubscriptionId = subscription}]
 
         test <@ history |> apply |> notifyFollower message
@@ -37,7 +36,7 @@ type ``Subscription should`` ()=
     [<Fact>] 
     member x.``Given unfollow When notify follower Then do not returned FollowerMessageQuacked`` () =
         let subscription = { Follower = { Email = "follower@mix-it.fr"}; Followee = { Email = "followee@mix-it.fr"} }
-        let message = MessageId.generate()
+        let message = MessageId.Generate()
         let history = [
             UserFollowed { SubscriptionId = subscription}
             UserUnfollowed { SubscriptionId = subscription }

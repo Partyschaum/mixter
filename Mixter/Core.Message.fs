@@ -4,7 +4,7 @@ open Mixter.Domain.Identity.UserIdentity
 open System
 
 type MessageId = MessageId of string
-    with static member generate() = MessageId (Guid.NewGuid().ToString())
+    with static member Generate() = MessageId (Guid.NewGuid().ToString())
 
 type Event =
     | MessageQuacked of MessageQuacked
@@ -43,9 +43,9 @@ let applyOne decisionProjection event =
         match decisionProjection with
         | QuackedMessage p -> QuackedMessage { p with Requackers = e.Requacker :: p.Requackers }
         | _ -> decisionProjection
-    | MessageDeleted e -> 
+    | MessageDeleted _ -> 
         match decisionProjection with
-        | QuackedMessage p -> DeletedMessage
+        | QuackedMessage _ -> DeletedMessage
         | _ -> decisionProjection
 
 let apply events =

@@ -2,7 +2,6 @@
 
 open Xunit
 open Swensen.Unquote
-open System
 open Mixter.Domain.Identity.UserIdentity
 open Mixter.Domain.Core.Message
 open Mixter.Domain.Core.Timeline
@@ -11,8 +10,8 @@ open Mixter.Infrastructure.Core
 type ``Timeline`` ()=
     [<Fact>] 
     member x.``When handle MessageQuacked Then save TimelineMessage projection for author`` () =
-        let repository = new MemoryTimelineMessageStore()
-        let messageQuacked = { MessageId = MessageId.generate(); AuthorId = { Email = "A" }; Content = "Hello" }
+        let repository = MemoryTimelineMessageStore()
+        let messageQuacked = { MessageId = MessageId.Generate(); AuthorId = { Email = "A" }; Content = "Hello" }
 
         MessageQuacked messageQuacked |> handle repository.Save repository.Delete
 
@@ -26,8 +25,8 @@ type ``Timeline`` ()=
 
     [<Fact>] 
     member x.``When handle MessageDeleted Then remove this message in timeline`` () =
-        let repository = new MemoryTimelineMessageStore()
-        let messageId = MessageId.generate()
+        let repository = MemoryTimelineMessageStore()
+        let messageId = MessageId.Generate()
         let author = { Email = "A" }
 
         MessageQuacked { MessageId = messageId; AuthorId = author; Content = "Hello" } 

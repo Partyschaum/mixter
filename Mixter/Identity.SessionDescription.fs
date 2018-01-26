@@ -1,6 +1,5 @@
 ﻿module Mixter.Domain.Identity.SessionDescription
 
-open System
 open UserIdentity
 open Session
 

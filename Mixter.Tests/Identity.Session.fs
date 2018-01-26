@@ -10,9 +10,9 @@ type ``Given a started session`` ()=
 
     [<Fact>]
     member x.``When he logs in, then user connected event is returned`` () =
-        let sessionId = SessionId.generate()
+        let sessionId = SessionId.Generate()
         let generateSessionId = fun () -> sessionId
-        let getCurrentTime = fun () -> new DateTime()
+        let getCurrentTime = fun () -> DateTime()
         let user = { Email = "clem@mix-it.fr" }
 
         test <@ logIn user generateSessionId getCurrentTime
@@ -20,9 +20,9 @@ type ``Given a started session`` ()=
 
     [<Fact>]
     member x.``When disconnect, then user disconnected event is returned`` () =
-        let sessionId = SessionId.generate()
+        let sessionId = SessionId.Generate()
         let userId = { Email = "clem@mix-it.fr" }
-        let getCurrentTime = fun () -> new DateTime()
+        let getCurrentTime = fun () -> DateTime()
         let history = [ UserConnected { SessionId = sessionId; UserId = userId; ConnectedAt = getCurrentTime () }]
         
         test <@ history |> apply |> logOut
@@ -30,13 +30,13 @@ type ``Given a started session`` ()=
     
     [<Fact>]
     member x.``Given session have been disconnected, when disconnect, then nothing happen`` () =
-        let sessionId = SessionId.generate()
+        let sessionId = SessionId.Generate()
         let userId = { Email = "clem@mix-it.fr" }
-        let getCurrentTime = fun () -> new DateTime()
+        let getCurrentTime = fun () -> DateTime()
         let history = [  
             UserConnected { SessionId = sessionId; UserId = userId; ConnectedAt = getCurrentTime () };
             UserDisconnected { SessionId = sessionId; UserId = userId } 
         ]   
         
-        test <@ history |> apply |> logOut = [] @>
+        test <@ history |> apply |> logOut |> Seq.isEmpty @>
         

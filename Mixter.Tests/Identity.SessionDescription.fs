@@ -8,7 +8,7 @@ open Mixter.Domain.Identity.Session;
 open Mixter.Domain.Identity.SessionDescription;
 
 type ``Given a handler of session events`` ()=
-    let sessionId = SessionId.generate()
+    let sessionId = SessionId.Generate()
     let userId = { Email = "clem@mix-it.fr"}
     
     [<Fact>]

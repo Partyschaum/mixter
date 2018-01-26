@@ -4,12 +4,11 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.Successful
-open Suave.Json
 open Mixter.Domain.Identity
 open Mixter.Infrastructure
 open Newtonsoft.Json
 
-let eventsStore = new EventsStore.MemoryEventsStore()
+let eventsStore = EventsStore.MemoryEventsStore()
 
 type RegisterResult = { Id: string; Url: string; LogIn: string }
 type RegisterDto = { Email: string } 

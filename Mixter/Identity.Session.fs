@@ -4,7 +4,7 @@ open System
 open Mixter.Domain.Identity.UserIdentity
 
 type SessionId = SessionId of string
-    with static member generate () = SessionId (Guid.NewGuid().ToString())
+    with static member Generate () = SessionId (Guid.NewGuid().ToString())
         
 type Event = 
     | UserConnected of UserConnectedEvent

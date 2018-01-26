@@ -1,5 +1,5 @@
 ﻿#r "../packages/Suave/lib/net40/Suave.dll"
-#r "../packages/Newtonsoft.Json/lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll"
+#r "../packages/Newtonsoft.Json/lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.dll"
 
 #load "Identity.UserIdentity.fs"
 #load "Identity.Session.fs"
@@ -9,7 +9,6 @@
 #load "Api.fs"
 
 open System
-open System.Collections.Generic
 
 open Mixter
 open Mixter.Domain.Identity
@@ -17,7 +16,7 @@ open UserIdentity
 open Session
 open Infrastructure.Identity.Read
 
-let sessionsStore = new MemorySessionsStore()
+let sessionsStore = MemorySessionsStore()
 
 let sessionHandler (event: Session.Event) =
     SessionDescription.apply event
