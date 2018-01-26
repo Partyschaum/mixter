@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Mixter/Mixter.fsproj" />
@@ -15,7 +16,6 @@
     <Compile Include="Identity.Infrastructure.Tests.fs" />
     <Compile Include="Core.Infrastructure.fs" />
     <Compile Include="EventsStore.fs" />
-    <None Include="App.config" />
     <None Include="paket.references" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
