@@ -7,10 +7,10 @@ open Mixter.Domain.Core.Message
 open Mixter.Domain.Core.Timeline
 open Mixter.Infrastructure.Core
 
-type ``TimelineMessageRepository should`` ()=
+module ``TimelineMessageRepository should`` =
     
     [<Fact>]
-    member x.``return messages of user when GetMessagesOfUser`` () =
+    let ``return messages of user when GetMessagesOfUser`` () =
         let repository = MemoryTimelineMessageStore()
         let timelineMessage = { Owner = { Email = "A" }; Author = { Email = "A" }; Content = "Hello"; MessageId = MessageId.Generate() }
 
@@ -20,7 +20,7 @@ type ``TimelineMessageRepository should`` ()=
                     = [timelineMessage] @>
 
     [<Fact>]
-    member x.``save only one message when save two same message`` () =
+    let ``save only one message when save two same message`` () =
         let repository = MemoryTimelineMessageStore()
         let timelineMessage = { Owner = { Email = "A" }; Author = { Email = "A" }; Content = "Hello"; MessageId = MessageId.Generate() }
 
@@ -31,7 +31,7 @@ type ``TimelineMessageRepository should`` ()=
                   = [timelineMessage] @>
             
     [<Fact>]
-    member x.``Remove message of all users when remove this message`` () =
+    let ``Remove message of all users when remove this message`` () =
         let repository = MemoryTimelineMessageStore()
         let messageId = MessageId.Generate()
         let user1 = { Email = "A" }

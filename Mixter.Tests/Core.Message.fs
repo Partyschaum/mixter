@@ -5,17 +5,17 @@ open Swensen.Unquote
 open Mixter.Domain.Identity.UserIdentity
 open Mixter.Domain.Core.Message
 
-type ``MessageId should`` ()=
+module ``MessageId should`` =
     [<Fact>] 
-    member x.``Return unique id when generate`` () =
+    let ``Return unique id when generate`` () =
         let messageId1 = MessageId.Generate()
         let messageId2 = MessageId.Generate()
 
         test <@ messageId1 <> messageId2 @>
 
-type ``Given a Message`` ()=
+module ``Given a Message`` =
     [<Fact>] 
-    member x.``When quack, then user quacked event is returned`` () =
+    let ``When quack, then user quacked event is returned`` () =
         let messageId = MessageId.Generate()
         let userId = { Email = "clem@mix-it.fr"}
 
@@ -23,7 +23,7 @@ type ``Given a Message`` ()=
                   = [ MessageQuacked { MessageId = messageId; AuthorId = userId; Content = "hello world" } ] @>
 
     [<Fact>] 
-    member x.``When requack, then user requacked event is returned`` () =
+    let ``When requack, then user requacked event is returned`` () =
         let messageId = MessageId.Generate()
         let requaker = { Email = "someone@mix-it.fr"}
 
@@ -35,7 +35,7 @@ type ``Given a Message`` ()=
         test <@ result = [ MessageRequacked { MessageId = messageId; Requacker = requaker } ] @>
             
     [<Fact>] 
-    member x.``When author requack, then nothing is returned`` () =
+    let ``When author requack, then nothing is returned`` () =
         let messageId = MessageId.Generate()
         let authorId = { Email = "clem@mix-it.fr" }
 
@@ -47,7 +47,7 @@ type ``Given a Message`` ()=
         test <@ result |> Seq.isEmpty @>
             
     [<Fact>] 
-    member x.``When requack two times same message, then nothing is returned`` () =
+    let ``When requack two times same message, then nothing is returned`` () =
         let messageId = MessageId.Generate()
         let authorId = { Email = "author@mix-it.fr" }
         let requackerId = { Email = "requacker@mix-it.fr" }
@@ -63,7 +63,7 @@ type ``Given a Message`` ()=
         test <@ result |> Seq.isEmpty @>
             
     [<Fact>] 
-    member x.``When delete, then return MessageDeleted`` () =
+    let ``When delete, then return MessageDeleted`` () =
         let messageId = MessageId.Generate()
         let authorId = { Email = "author@mix-it.fr" }
 
@@ -77,7 +77,7 @@ type ``Given a Message`` ()=
         test <@ result = [ MessageDeleted { MessageId = messageId; Deleter = authorId } ] @>
             
     [<Fact>] 
-    member x.``When delete by someone else than author, then do not return MessageDeleted`` () =
+    let ``When delete by someone else than author, then do not return MessageDeleted`` () =
         let messageId = MessageId.Generate()
         let authorId = { Email = "author@mix-it.fr" }
         let deleterId = { Email = "deleter@mix-it.fr" }
@@ -92,7 +92,7 @@ type ``Given a Message`` ()=
         test <@ result |> Seq.isEmpty @>
             
     [<Fact>] 
-    member x.``Given deleted message When delete Then Nothing`` () =
+    let ``Given deleted message When delete Then Nothing`` () =
         let messageId = MessageId.Generate()
         let authorId = { Email = "author@mix-it.fr" }
 
@@ -107,7 +107,7 @@ type ``Given a Message`` ()=
         test <@ result |> Seq.isEmpty @>
             
     [<Fact>] 
-    member x.``Given deleted message When requack Then do not raise MessageRequacked`` () =
+    let ``Given deleted message When requack Then do not raise MessageRequacked`` () =
         let messageId = MessageId.Generate()
         let authorId = { Email = "author@mix-it.fr" }
         let requacker = { Email = "otherUser@mix-it.fr" }
@@ -121,6 +121,3 @@ type ``Given a Message`` ()=
             |> requack requacker
             
         test <@ result |> Seq.isEmpty @>
-
-
-

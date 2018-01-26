@@ -7,9 +7,9 @@ open Mixter.Domain.Core.Message
 open Mixter.Domain.Core.Timeline
 open Mixter.Infrastructure.Core
 
-type ``Timeline`` ()=
+module ``Timeline`` =
     [<Fact>] 
-    member x.``When handle MessageQuacked Then save TimelineMessage projection for author`` () =
+    let ``When handle MessageQuacked Then save TimelineMessage projection for author`` () =
         let repository = MemoryTimelineMessageStore()
         let messageQuacked = { MessageId = MessageId.Generate(); AuthorId = { Email = "A" }; Content = "Hello" }
 
@@ -24,7 +24,7 @@ type ``Timeline`` ()=
                     }] @>
 
     [<Fact>] 
-    member x.``When handle MessageDeleted Then remove this message in timeline`` () =
+    let ``When handle MessageDeleted Then remove this message in timeline`` () =
         let repository = MemoryTimelineMessageStore()
         let messageId = MessageId.Generate()
         let author = { Email = "A" }
@@ -36,4 +36,3 @@ type ``Timeline`` ()=
         |> handle repository.Save repository.Delete 
 
         test <@ repository.GetMessagesOfUser author |> Seq.isEmpty @>
-

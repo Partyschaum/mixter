@@ -6,10 +6,10 @@ open System
 open Mixter.Domain.Identity.UserIdentity;
 open Mixter.Domain.Identity.Session;
 
-type ``Given a started session`` ()=
+module ``Given a started session`` =
 
     [<Fact>]
-    member x.``When he logs in, then user connected event is returned`` () =
+    let ``When he logs in, then user connected event is returned`` () =
         let sessionId = SessionId.Generate()
         let generateSessionId = fun () -> sessionId
         let getCurrentTime = fun () -> DateTime()
@@ -19,7 +19,7 @@ type ``Given a started session`` ()=
                     = [ UserConnected { SessionId = sessionId; UserId = user; ConnectedAt = getCurrentTime () } ] @>
 
     [<Fact>]
-    member x.``When disconnect, then user disconnected event is returned`` () =
+    let ``When disconnect, then user disconnected event is returned`` () =
         let sessionId = SessionId.Generate()
         let userId = { Email = "clem@mix-it.fr" }
         let getCurrentTime = fun () -> DateTime()
@@ -29,7 +29,7 @@ type ``Given a started session`` ()=
                     = [UserDisconnected { SessionId = sessionId; UserId = userId } ] @>
     
     [<Fact>]
-    member x.``Given session have been disconnected, when disconnect, then nothing happen`` () =
+    let ``Given session have been disconnected, when disconnect, then nothing happen`` () =
         let sessionId = SessionId.Generate()
         let userId = { Email = "clem@mix-it.fr" }
         let getCurrentTime = fun () -> DateTime()

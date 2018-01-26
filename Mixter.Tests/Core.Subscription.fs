@@ -6,9 +6,9 @@ open Mixter.Domain.Identity.UserIdentity
 open Mixter.Domain.Core.Message
 open Mixter.Domain.Core.Subscription
 
-type ``Subscription should`` ()=
+module ``Subscription should`` =
     [<Fact>] 
-    member x.``When follow Then UserFollowed is returned`` () =
+    let ``When follow Then UserFollowed is returned`` () =
         let follower = { Email = "follower@mix-it.fr" } 
         let followee = { Email = "followee@mix-it.fr" }
 
@@ -16,7 +16,7 @@ type ``Subscription should`` ()=
                     = [UserFollowed { SubscriptionId = { Follower = follower; Followee = followee } }] @>
 
     [<Fact>] 
-    member x.``When unfollow Then UserUnfollowed is returned`` () =
+    let ``When unfollow Then UserUnfollowed is returned`` () =
         let subscription = { Follower = { Email = "follower@mix-it.fr" }; Followee = { Email = "followee@mix-it.fr" } }
         let history = [UserFollowed { SubscriptionId = subscription }]
 
@@ -25,7 +25,7 @@ type ``Subscription should`` ()=
                 = [UserUnfollowed { SubscriptionId = subscription }] @>
 
     [<Fact>] 
-    member x.``When notify follower Then FolloweeMessageQuacked`` () =
+    let ``When notify follower Then FolloweeMessageQuacked`` () =
         let subscription = { Follower = { Email = "follower@mix-it.fr" }; Followee = { Email = "followee@mix-it.fr"} }
         let message = MessageId.Generate()
         let history = [UserFollowed { SubscriptionId = subscription}]
@@ -34,7 +34,7 @@ type ``Subscription should`` ()=
                     = [FolloweeMessageQuacked { SubscriptionId = subscription; Message = message}] @>
 
     [<Fact>] 
-    member x.``Given unfollow When notify follower Then do not returned FollowerMessageQuacked`` () =
+    let ``Given unfollow When notify follower Then do not returned FollowerMessageQuacked`` () =
         let subscription = { Follower = { Email = "follower@mix-it.fr"}; Followee = { Email = "followee@mix-it.fr"} }
         let message = MessageId.Generate()
         let history = [

@@ -7,10 +7,10 @@ open Mixter.Domain.Identity.Session
 open Mixter.Domain.Identity.SessionDescription
 open Mixter.Infrastructure.Identity.Read
 
-type ``Given a repository of session projection`` ()=
+module ``Given a repository of session projection`` =
 
     [<Fact>]
-    member x.``Given repository contains two session projection, when get a session by its id, then it returns the corresponding session projection`` () =
+    let ``Given repository contains two session projection, when get a session by its id, then it returns the corresponding session projection`` () =
         let sessionId = SessionId.Generate ()
         let anotherSessionId = SessionId.Generate ()
         let sessions = MemorySessionsStore()
@@ -21,7 +21,7 @@ type ``Given a repository of session projection`` ()=
                     = (Some { UserId = { Email = "user1@mix-it.fr" } }) @>
 
     [<Fact>]
-    member x.``When GetUserSession with userId, then return sessionId`` () =
+    let ``When GetUserSession with userId, then return sessionId`` () =
         let sessionId = SessionId.Generate ()
         let sessions = MemorySessionsStore()
         let userId = { Email = "user1@mix-it.fr" }
@@ -30,7 +30,7 @@ type ``Given a repository of session projection`` ()=
         test <@ sessions.GetUserSession userId = Some sessionId @>
 
     [<Fact>]
-    member x.``When GetUserSession with unknown userId, then return None`` () =
+    let ``When GetUserSession with unknown userId, then return None`` () =
         let sessions = MemorySessionsStore()
         let userId = { Email = "user1@mix-it.fr" } 
 
