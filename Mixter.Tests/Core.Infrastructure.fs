@@ -1,27 +1,26 @@
 ﻿namespace Mixter.Tests.Infrastructure.Core
 
-open NUnit.Framework
-open FsUnit
+open Swensen.Unquote
+open Xunit
 open Mixter.Domain.Identity.UserIdentity
 open Mixter.Domain.Core.Message
 open Mixter.Domain.Core.Timeline
 open Mixter.Infrastructure.Core
 open System.Collections.Generic
 
-[<TestFixture>]
 type ``TimelineMessageRepository should`` ()=
-
-    [<Test>]
+    
+    [<Fact>]
     member x.``return messages of user when GetMessagesOfUser`` () =
         let repository = new MemoryTimelineMessageStore()
         let timelineMessage = { Owner = { Email = "A" }; Author = { Email = "A" }; Content = "Hello"; MessageId = MessageId.generate() }
 
         repository.Save timelineMessage
 
-        repository.GetMessagesOfUser timelineMessage.Owner
-            |> should equal [timelineMessage]
+        test <@ repository.GetMessagesOfUser timelineMessage.Owner |> Seq.toList
+                    = [timelineMessage] @>
 
-    [<Test>]
+    [<Fact>]
     member x.``save only one message when save two same message`` () =
         let repository = new MemoryTimelineMessageStore()
         let timelineMessage = { Owner = { Email = "A" }; Author = { Email = "A" }; Content = "Hello"; MessageId = MessageId.generate() }
@@ -29,10 +28,10 @@ type ``TimelineMessageRepository should`` ()=
         repository.Save timelineMessage
         repository.Save timelineMessage
 
-        repository.GetMessagesOfUser timelineMessage.Owner
-            |> should equal [timelineMessage]
+        test <@ repository.GetMessagesOfUser timelineMessage.Owner |> Seq.toList
+                  = [timelineMessage] @>
             
-    [<Test>]
+    [<Fact>]
     member x.``Remove message of all users when remove this message`` () =
         let repository = new MemoryTimelineMessageStore()
         let messageId = MessageId.generate()
@@ -43,7 +42,7 @@ type ``TimelineMessageRepository should`` ()=
 
         repository.Delete messageId
 
-        repository.GetMessagesOfUser user1 |> should be Empty
-        repository.GetMessagesOfUser user2 |> should be Empty
+        test <@ repository.GetMessagesOfUser user1 |> Seq.isEmpty @>
+        test <@ repository.GetMessagesOfUser user2 |> Seq.isEmpty @>
 
             

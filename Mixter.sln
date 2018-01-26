@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mixter", "Mixter\Mixter.fsproj", "{0E3F86DB-33A9-43B8-BE48-9D16559D8601}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Mixter", "Mixter\Mixter.fsproj", "{0E3F86DB-33A9-43B8-BE48-9D16559D8601}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mixter.Tests", "Mixter.Tests\Mixter.Tests.fsproj", "{A056AA14-4939-4CFF-87F4-C5FBA4254095}"
 EndProject
@@ -32,5 +32,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3815EB27-7CE0-4E76-9FC4-7F6B5325A5FA}
 	EndGlobalSection
 EndGlobal
