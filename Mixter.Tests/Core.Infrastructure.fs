@@ -7,7 +7,7 @@ open Mixter.Domain.Core.Message
 open Mixter.Domain.Core.Timeline
 open Mixter.Infrastructure.Core
 
-module ``TimelineMessageRepository should`` =
+module ``MemoryTimelineMessageStore should`` =
     
     [<Fact>]
     let ``return messages of user when GetMessagesOfUser`` () =
@@ -44,4 +44,47 @@ module ``TimelineMessageRepository should`` =
         test <@ repository.GetMessagesOfUser user1 |> Seq.isEmpty @>
         test <@ repository.GetMessagesOfUser user2 |> Seq.isEmpty @>
 
+module ``MemoryFollowersRepository should`` =
+    open Mixter.Domain.Identity.UserIdentity
+    open Mixter.Domain.Core.SubscriptionProjection
+    
+    [<Fact>]
+    let ``When save Then GetFollowers return FollowerId`` () =
+        let repository = MemoryFollowersRepository()
+        let followee = { Email = "followee@mixit.fr" }
+        let follower = { Email = "follower@mixit.fr" }
+        repository.Save { Followee = followee; Follower = follower }
+
+        test <@ repository.GetFollowers followee |> Seq.toList = [follower] @>
+
+    [<Fact>]
+    let ``WhenSaveSeveralFollowersButNotSameFolloweeThenGetFollowersReturnOnlyFollowerIdsOfFollowee`` () =
+        let repository = MemoryFollowersRepository()
+        let followee1 = { Email = "followee1@mixit.fr" }
+        let followee2 = { Email = "followee2@mixit.fr" }
+        let follower1 = { Email = "follower1@mixit.fr" }
+        let follower2 = { Email = "follower2@mixit.fr" }
+        repository.Save { Followee = followee1; Follower = follower1 }
+        repository.Save { Followee = followee2; Follower = follower2 }
+
+        test <@ repository.GetFollowers followee1 |> Seq.toList = [follower1] @>
             
+    [<Fact>]
+    let ``WhenRemoveFollowerThenGetFollowersReturnEmpty`` () =
+        let repository = MemoryFollowersRepository()
+        let followee = { Email = "followee@mixit.fr" }
+        let follower = { Email = "follower@mixit.fr" }
+        repository.Save { Followee = followee; Follower = follower }
+        repository.Delete { Followee = followee; Follower = follower }
+
+        test <@ repository.GetFollowers followee |> Seq.isEmpty @>
+
+    [<Fact>]
+    let ``WhenSaveSeveralTimesSameFollowerThenGetFollowersReturn1Follower`` () =
+        let repository = MemoryFollowersRepository()
+        let followee = { Email = "followee@mixit.fr" }
+        let follower = { Email = "follower@mixit.fr" }
+        repository.Save { Followee = followee; Follower = follower }
+        repository.Save { Followee = followee; Follower = follower }
+
+        test <@ repository.GetFollowers followee |> Seq.toList = [follower] @>
