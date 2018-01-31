@@ -2,13 +2,13 @@
 
 open Swensen.Unquote
 open Xunit
-open Mixter.Domain.Identity.UserIdentity
-open Mixter.Domain.Core.Message
-open Mixter.Domain.Core.Timeline
 open Mixter.Infrastructure.Core
 
 module ``MemoryTimelineMessageStore should`` =
-    
+    open Mixter.Domain.Identity.UserIdentity
+    open Mixter.Domain.Core.Message
+    open Mixter.Domain.Core.Timeline
+
     [<Fact>]
     let ``return messages of user when GetMessagesOfUser`` () =
         let repository = MemoryTimelineMessageStore()
